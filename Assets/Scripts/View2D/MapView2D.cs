@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class MapView2D : MonoBehaviour {
+public class MapView2D : MonoBehaviour, IMapView {
 
     public GameObject tilePrefab;
     public GameObject tilesContainer;
@@ -18,11 +18,13 @@ public class MapView2D : MonoBehaviour {
     // Update is called once per frame
     public void Update()
     {
-        foreach (Transform child in tilesContainer.transform)
+
+        // Mise à jour de l'affichage de la map
+        /*foreach (Transform child in tilesContainer.transform)
         {
             TileView2D tileView = child.gameObject.GetComponent<TileView2D>();
             tileView.UpdateWalls();
-        }
+        }*/
     }
 
     /**

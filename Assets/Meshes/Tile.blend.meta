@@ -1,15 +1,57 @@
 fileFormatVersion: 2
-guid: 787f291a70a84fe4fac70ad963857135
-timeCreated: 1463926494
+guid: e516b26134eb35443b9a6df61667c831
+timeCreated: 1463955464
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cube
+    100000: EastWall
+    100002: Floor
+    100004: NorthWall
+    100006: SouthWall
+    100008: //RootNode
+    100010: WestWall
+    100012: NorthEastColumn
+    100014: NorthWestColumn
+    100016: SouthEastColumn
+    100018: SouthWestColumn
+    400000: EastWall
+    400002: Floor
+    400004: NorthWall
+    400006: SouthWall
+    400008: //RootNode
+    400010: WestWall
+    400012: NorthEastColumn
+    400014: NorthWestColumn
+    400016: SouthEastColumn
+    400018: SouthWestColumn
+    2300000: EastWall
+    2300002: Floor
+    2300004: NorthWall
+    2300006: SouthWall
+    2300008: WestWall
+    2300010: NorthEastColumn
+    2300012: NorthWestColumn
+    2300014: SouthEastColumn
+    2300016: SouthWestColumn
+    3300000: EastWall
+    3300002: Floor
+    3300004: NorthWall
+    3300006: SouthWall
+    3300008: WestWall
+    3300010: NorthEastColumn
+    3300012: NorthWestColumn
+    3300014: SouthEastColumn
+    3300016: SouthWestColumn
+    4300000: Floor
+    4300002: WestWall
+    4300004: NorthWall
+    4300006: EastWall
+    4300008: SouthWall
+    4300010: NorthEastColumn
+    4300012: NorthWestColumn
+    4300014: SouthEastColumn
+    4300016: SouthWestColumn
     7400000: Default Take
     9500000: //RootNode
   materials:

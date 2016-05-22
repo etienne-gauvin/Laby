@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
-public class Map {
+public class Map : IEnumerable {
     
     /**
      * Liste (désordonnée) des tiles de la map
@@ -14,7 +15,7 @@ public class Map {
      */
     public Tile RandomTile()
     {
-        return tiles[Mathf.FloorToInt(Random.Range(0, tiles.Count))];
+        return tiles[Mathf.FloorToInt(UnityEngine.Random.Range(0, tiles.Count))];
     }
     
     /**
@@ -115,5 +116,10 @@ public class Map {
         {
             tile.neighbors[direction].DestroyWall(Tile.OppositeDirection(direction));
         }
+    }
+
+    public IEnumerator GetEnumerator()
+    {
+        return tiles.GetEnumerator();
     }
 }
