@@ -4,7 +4,8 @@ using System.Collections;
 
 public class MapView2D : MonoBehaviour {
 
-    public GameObject tilePrefabGO;
+    public GameObject tilePrefab;
+    public GameObject tilesContainer;
 
     protected Map map;
     
@@ -17,7 +18,7 @@ public class MapView2D : MonoBehaviour {
     // Update is called once per frame
     public void Update()
     {
-        foreach (Transform child in gameObject.transform)
+        foreach (Transform child in tilesContainer.transform)
         {
             TileView2D tileView = child.gameObject.GetComponent<TileView2D>();
             tileView.UpdateWalls();
@@ -31,17 +32,19 @@ public class MapView2D : MonoBehaviour {
     {
         this.map = map;
 
-        GridLayoutGroup gridLayout = gameObject.GetComponent<GridLayoutGroup>();
-        RectTransform transform = gameObject.GetComponent<RectTransform>();
+        GridLayoutGroup gridLayout = tilesContainer.GetComponent<GridLayoutGroup>();
+        RectTransform transform = tilesContainer.GetComponent<RectTransform>();
 
         Vector2 size = map.GetSize();
         int maxXY = (int) Mathf.Max(size.x, size.y);
 
         // Redéfinir la taille de la grille en fonction de la taille de la map
         gridLayout.cellSize = new Vector2(
-            transform.rect.width / (maxXY),
-            transform.rect.height / (maxXY)
+            transform.rect.width / maxXY,
+            transform.rect.height / maxXY
         );
+
+        Debug.Log(transform.rect.width + " ; " + maxXY);
 
         gridLayout.constraintCount = maxXY;
 
@@ -50,8 +53,8 @@ public class MapView2D : MonoBehaviour {
         {
             for (int x = 0; x < maxXY; x++)
             {
-                GameObject tileViewGO = Instantiate(tilePrefabGO);
-                tileViewGO.gameObject.transform.SetParent(gameObject.transform);
+                GameObject tileViewGO = Instantiate(tilePrefab);
+                tileViewGO.gameObject.transform.SetParent(tilesContainer.transform);
                 
                 Tile tile = map.GetTile(x, y);
 

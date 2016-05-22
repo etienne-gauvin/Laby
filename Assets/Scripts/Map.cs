@@ -110,15 +110,10 @@ public class Map {
     public void DestroyWalls(Tile tile, Tile.Direction direction)
     {
         tile.DestroyWall(direction);
-        Debug.Log(tile);
 
         if (tile.neighbors[direction] != null)
         {
             tile.neighbors[direction].DestroyWall(Tile.OppositeDirection(direction));
-        }
-        else
-        {
-            Debug.Log("tile.neighbors " + tile + " null");
         }
     }
 }

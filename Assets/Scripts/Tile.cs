@@ -140,12 +140,10 @@ public class Tile {
      */
     public void DestroyWall(Direction direction)
     {
-        Debug.Log(walls.Contains(direction));
         if (walls.Contains(direction))
         {
             walls.Remove(direction);
         }
-        Debug.Log(walls.Contains(direction));
     }
 
     /**
