@@ -27,35 +27,29 @@ public class MapGenerator {
         HashSet<Tile> tileGroup;
         HashSet<Tile> neighbourGroup;
 
+        var grid = map.grid.Hexes;
 
-        // Créer des tiles entourées de murs
-        for (int x = 0; x < 16; x++)
+        foreach(Cube position in grid)
         {
-            for (int y = 0; y < 16; y++)
-            {
-                tile = map.MakeTile(x, y);
-                tile.walkable = true;
+            tile = map.MakeTile(position);
+            tile.walkable = true;
 
-                // Création d'un groupe unique pour cette tile
-                tileGroup = new HashSet<Tile>();
-                tileGroup.Add(tile);
-                groups.Add(tileGroup);
-            }
+            // Création d'un groupe unique pour cette tile
+            tileGroup = new HashSet<Tile>();
+            tileGroup.Add(tile);
+            groups.Add(tileGroup);
         }
-
+        
         // Retrouver toutes les tiles voisines des autres
         map.FindAllNeighbors();
-
-        // Taille de la map
-        Vector2 size = map.GetSize();
-
+        
         // Ouverture aléatoire de murs
         while (groups.Count > 1)
         {
             tile = map.RandomTile();
             tileGroup = GetGroupOf(tile);
 
-            Tile.Direction direction = Tile.RandomDirection();
+            Cube.Direction direction = Cube.Direction.GetRandom();
 
             if (tile.neighbors[direction] != null)
             {

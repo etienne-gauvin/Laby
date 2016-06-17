@@ -3,33 +3,57 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class Map : IEnumerable {
-    
+[System.Serializable]
+public class Map : System.Object, IEnumerable
+{
     /**
-     * Liste (désordonnée) des tiles de la map
+     * Grille hexagonale
      */
-    protected List<Tile> tiles;
+    public HexGrid grid;
 
     /**
-     * Retourne uen tile aléatoire
+     * Dictionnaire des tiles de la map
+     */
+    public Dictionary<Cube, Tile> tiles;
+    
+    /**
+     * Retourne une tile aléatoire
      */
     public Tile RandomTile()
     {
-        return tiles[Mathf.FloorToInt(UnityEngine.Random.Range(0, tiles.Count))];
+        int rand = UnityEngine.Random.Range(0, tiles.Values.Count);
+
+        int i = 0;
+        
+        foreach (Tile tile in tiles.Values)
+        {
+            if (i == rand)
+            {
+                return tile;
+            }
+
+            i++;
+        }
+
+        return null;
     }
     
     /**
      * Crée une nouvelle tile
      */
-    public Tile MakeTile(int x, int y)
+    public Tile MakeTile(Cube position)
     {
-        if (GetTile(x, y) != null)
+        if (tiles.ContainsKey(position))
         {
             throw new System.Exception("A tile already exists at this position");
         }
 
-        Tile tile = new Tile(this, x, y);
-        tiles.Add(tile);
+
+        Tile tile = new Tile(this, position);
+        tiles[position] = tile;
+
+        Debug.Log("New tile " + tile);
+
         return tile;
     }
 
@@ -37,41 +61,30 @@ public class Map : IEnumerable {
      * Retourne une tile d'après sa position sur la map.
      * Retourne null si il n'y a pas de tile.
      */
-    public Tile GetTile(int x, int y)
+    public Tile this[Cube position]
     {
-        foreach (Tile tile in tiles)
+        get
         {
-            if (x == tile.X && y == tile.Y)
+            if (tiles.ContainsKey(position))
             {
-                return tile;
+                return tiles[position];
+            }
+            else
+            {
+                return null;
             }
         }
-        
-        return null;
     }
-
-    /**
-     * Retourne une tile d'après une position sur la map.
-     */
-    public Tile GetTile(float x, float y)
-    {
-        return GetTile(Mathf.FloorToInt(x), Mathf.FloorToInt(y));
-    }
-
-    /**
-     * Retourne une tile d'après une position sur la map.
-     */
-    public Tile GetTile(Vector2 position)
-    {
-        return GetTile(position.x, position.y);
-    }
-
+    
     /**
      * Créer et générer la map
      */
     public Map()
     {
-        tiles = new List<Tile>();
+        grid = new HexGrid(HexGrid.HexagonalShape(6));
+        grid.orientation = Orientation.Horizontal;
+
+        tiles = new Dictionary<Cube, Tile>();
     }
 
     /**
@@ -79,7 +92,7 @@ public class Map : IEnumerable {
      */
     public void FindAllNeighbors()
     {
-        foreach (Tile tile in tiles)
+        foreach (Tile tile in tiles.Values)
         {
             tile.FindNeighbors();
         }
@@ -88,33 +101,35 @@ public class Map : IEnumerable {
     /**
      * Calcule la taille de la map.
      */
-    public Vector2 GetSize()
+    public Cube GetSize()
     {
-        Vector2 min = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
-        Vector2 max = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
+        Cube min = new Cube(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
+        Cube max = new Cube(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity);
 
-        foreach (Tile tile in tiles)
+        foreach (Cube position in tiles.Keys)
         {
-            min.x = Mathf.Min(min.x, tile.X);
-            min.y = Mathf.Min(min.y, tile.Y);
+            min.x = Mathf.Min(min.x, position.x);
+            min.y = Mathf.Min(min.y, position.y);
+            min.z = Mathf.Min(min.z, position.z);
 
-            max.x = Mathf.Max(max.x, tile.X);
-            max.y = Mathf.Max(max.y, tile.Y);
+            max.x = Mathf.Max(max.x, position.x);
+            max.y = Mathf.Max(max.y, position.y);
+            max.z = Mathf.Max(max.z, position.z);
         }
 
-        return max - min + new Vector2(1, 1);
+        return max - min + new Cube(1, 1, 1);
     }
 
     /**
      * Supprimer le mur entre deux tiles
      */
-    public void DestroyWalls(Tile tile, Tile.Direction direction)
+    public void DestroyWalls(Tile tile, Cube.Direction direction)
     {
         tile.DestroyWall(direction);
 
         if (tile.neighbors[direction] != null)
         {
-            tile.neighbors[direction].DestroyWall(Tile.OppositeDirection(direction));
+            tile.neighbors[direction].DestroyWall(direction.Opposite());
         }
     }
 

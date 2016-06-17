@@ -3,70 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Tile {
-
-    public enum Direction
-    {
-        North,
-        East,
-        South,
-        West
-    }
-
-    /**
-     * Retourne une direction aléatoire
-     */
-    public static Direction RandomDirection()
-    {
-        Direction[] directions = {
-            Direction.North,
-            Direction.West,
-            Direction.South,
-            Direction.East
-        };
-
-        return directions[Random.Range(0, 4)];
-    }
-
-    /**
-     * Retourne la direction opposée à une autre
-     */
-    public static Direction OppositeDirection(Direction direction)
-    {
-        Direction opposite;
-
-        switch (direction)
-        {
-            case Direction.North:
-                opposite = Direction.South;
-                break;
-
-            case Direction.South:
-                opposite = Direction.North;
-                break;
-
-            case Direction.East:
-                opposite = Direction.West;
-                break;
-
-            default:
-            case Direction.West:
-                opposite = Direction.East;
-                break;
-
-        }
-
-        return opposite;
-    }
     
     /**
      * Murs de la tile
      */
-    public HashSet<Direction> walls;
+    public Dictionary<Cube.Direction, Wall> walls;
 
     /**
      * Tiles voisines
      */
-    public Dictionary<Direction, Tile> neighbors;
+    public Dictionary<Cube.Direction, Tile> neighbors;
 
     /**
      * Si il est possible de se déplacer sur cette tile
@@ -76,51 +22,31 @@ public class Tile {
     /**
      * Position de la tile sur la map
      */
-    public readonly Vector2 position;
+    public Cube position;
     
-    /**
-     * Raccourci pour position.x
-     */
-    public int X
-    {
-        get
-        {
-            return Mathf.FloorToInt(position.x);
-        }
-    }
-
-    /**
-     * Raccourci pour position.y
-     */
-    public int Y
-    {
-        get
-        {
-            return Mathf.FloorToInt(position.y);
-        }
-    }
-
     /**
      * Map associée à la tile
      */
-    private Map map;
+    public Map map;
 
     /**
      * Créer une tile.
      * /!\ Utiliser Map.MakeTile() à la place.
      */
-    public Tile(Map map, int x, int y)
+    public Tile(Map map, Cube position)
     {
         this.map = map;
-        this.position = new Vector2(x, y);
+        this.position = position;
 
-        walls = new HashSet<Direction>();
-        walls.Add(Direction.North);
-        walls.Add(Direction.East);
-        walls.Add(Direction.South);
-        walls.Add(Direction.West);
+        walls = new Dictionary<Cube.Direction, Wall>();
+        walls[Cube.Direction.Get(0)] = new Wall();
+        walls[Cube.Direction.Get(1)] = new Wall();
+        walls[Cube.Direction.Get(2)] = new Wall();
+        walls[Cube.Direction.Get(3)] = new Wall();
+        walls[Cube.Direction.Get(4)] = new Wall();
+        walls[Cube.Direction.Get(5)] = new Wall();
 
-        neighbors = new Dictionary<Direction, Tile>();
+        neighbors = new Dictionary<Cube.Direction, Tile>();
         FindNeighbors();
     }
 
@@ -129,18 +55,21 @@ public class Tile {
      */
     public void FindNeighbors()
     {
-        neighbors[Direction.North] = map.GetTile(X, Y - 1);
-        neighbors[Direction.East] = map.GetTile(X + 1, Y);
-        neighbors[Direction.South] = map.GetTile(X, Y + 1);
-        neighbors[Direction.West] = map.GetTile(X - 1, Y);
+        Cube.Direction direction;
+
+        for (int i = 0; i < 6; i++)
+        {
+            direction = Cube.Direction.Get(i);
+            neighbors[direction] = map[position + direction];
+        }
     }
 
     /**
      * Détruit un mur
      */
-    public void DestroyWall(Direction direction)
+    public void DestroyWall(Cube.Direction direction)
     {
-        if (walls.Contains(direction))
+        if (walls[direction] != null)
         {
             walls.Remove(direction);
         }
@@ -151,6 +80,6 @@ public class Tile {
      */
     override public string ToString()
     {
-        return position.x + ";" + position.y;
+        return position.ToString();
     }
 }

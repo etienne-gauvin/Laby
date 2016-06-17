@@ -33,7 +33,7 @@ public class MapView3D : MonoBehaviour, IMapView {
     public void AttachMap(Map map)
     {
         this.map = map;
-        
+        /*
         Vector2 size = map.GetSize();
         
         foreach (Tile tile in map)
@@ -43,6 +43,6 @@ public class MapView3D : MonoBehaviour, IMapView {
             tileViewGO.gameObject.transform.position = new Vector3(tile.X * TileView3D.size.x, 0, - tile.Y * TileView3D.size.y);
 
             tileViewGO.GetComponent<TileView3D>().AttachTile(tile);
-        }
+        }*/
     }
 }

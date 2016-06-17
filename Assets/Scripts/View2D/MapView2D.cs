@@ -33,35 +33,39 @@ public class MapView2D : MonoBehaviour, IMapView {
     public void AttachMap(Map map)
     {
         this.map = map;
-
-        GridLayoutGroup gridLayout = tilesContainer.GetComponent<GridLayoutGroup>();
-        RectTransform transform = tilesContainer.GetComponent<RectTransform>();
-
-        Vector2 size = map.GetSize();
-        int maxXY = (int) Mathf.Max(size.x, size.y);
-
-        // Redéfinir la taille de la grille en fonction de la taille de la map
-        gridLayout.cellSize = new Vector2(
-            transform.rect.width / maxXY,
-            transform.rect.height / maxXY
-        );
-
-        Debug.Log(transform.rect.width + " ; " + maxXY);
-
-        gridLayout.constraintCount = maxXY;
-
         
-        for (int y = 0; y < maxXY; y++)
+        foreach (Cube position in map.grid.Hexes)
         {
-            for (int x = 0; x < maxXY; x++)
-            {
-                GameObject tileViewGO = Instantiate(tilePrefab);
-                tileViewGO.gameObject.transform.SetParent(tilesContainer.transform);
-                
-                Tile tile = map.GetTile(x, y);
+            GameObject tileViewGO = Instantiate(tilePrefab);
 
-                tileViewGO.GetComponent<TileView2D>().AttachTile(tile);
+            tileViewGO.gameObject.transform.SetParent(tilesContainer.transform);
+
+            Tile tile = map[position];
+
+            ScreenCoordinate sc = map.grid.HexToCenter(position);
+
+            RectTransform transform = (RectTransform) tileViewGO.gameObject.transform;
+
+            float h = 33;
+            float w = Mathf.Sqrt(3) / 2 * h;
+
+            Debug.Log(tile + " ==> " + sc);
+
+            transform.position = tilesContainer.transform.position + new Vector3(sc.position.x * 32, sc.position.y * 32, 0);
+            /*transform.sizeDelta = new Vector2(
+                w,
+                h
+            );*/
+
+            foreach (RectTransform childTransform in tilesContainer.transform)
+            {
+                /*childTransform.sizeDelta = new Vector2(
+                    w,
+                    h
+                );*/
             }
+
+            tileViewGO.GetComponent<TileView2D>().AttachTile(tile);
         }
     }
 }

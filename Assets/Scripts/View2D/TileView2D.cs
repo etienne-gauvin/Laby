@@ -7,18 +7,18 @@ public class TileView2D : MonoBehaviour, ITileView {
 
     public Tile tile;
     
-    public Dictionary<Tile.Direction, GameObject> walls;
+    public GameObject[] walls;
 
     // Use this for initialization
     public void Awake()
     {
-        walls = new Dictionary<Tile.Direction, GameObject>();
+        //walls = new GameObject[6];
 
         // Ajout des GameObjects pour les 4 directions
-        foreach (Tile.Direction direction in Enum.GetValues(typeof(Tile.Direction)))
-        {
-            walls.Add(direction, gameObject.transform.FindChild(direction.ToString()).gameObject);
-        }
+        //foreach (Cube.Direction direction in Cube.Direction.GetAll())
+        //{
+        //    walls[direction.d] = gameObject.transform.FindChild("Wall" + direction.d).gameObject;
+        //}
     }
 
     // Use this for initialization
@@ -38,9 +38,9 @@ public class TileView2D : MonoBehaviour, ITileView {
     {
         if (tile != null)
         {
-            foreach (Tile.Direction direction in Enum.GetValues(typeof(Tile.Direction)))
+            foreach (Cube.Direction direction in Cube.Direction.GetAll())
             {
-                walls[direction].SetActive(tile.walls.Contains(direction));
+                walls[direction.d].SetActive(tile.walls.ContainsKey(direction));
             }
         }
     }

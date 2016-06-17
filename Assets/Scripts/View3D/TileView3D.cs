@@ -9,22 +9,17 @@ public class TileView3D : MonoBehaviour, ITileView {
 
     public GameObject meshContainer;
 
-    public Dictionary<Tile.Direction, GameObject> walls;
-
-    public GameObject northWestColumn;
-    public GameObject northEastColumn;
-    public GameObject southWestColumn;
-    public GameObject southEastColumn;
-
+    public Dictionary<Cube.Direction, GameObject> walls;
+    
     public static readonly Vector2 size = new Vector2(3, 3);
 
     // Use this for initialization
     public void Awake()
     {
-        walls = new Dictionary<Tile.Direction, GameObject>();
+        walls = new Dictionary<Cube.Direction, GameObject>();
 
         // Ajout des GameObjects pour les 4 directions
-        foreach (Tile.Direction direction in Enum.GetValues(typeof(Tile.Direction)))
+        foreach (Cube.Direction direction in Cube.Direction.GetAll())
         {
             walls.Add(direction, meshContainer.transform.FindChild(direction.ToString() + "Wall").gameObject);
         }
@@ -47,9 +42,9 @@ public class TileView3D : MonoBehaviour, ITileView {
     {
         if (tile != null)
         {
-            foreach (Tile.Direction direction in Enum.GetValues(typeof(Tile.Direction)))
+            foreach (Cube.Direction direction in Cube.Direction.GetAll())
             {
-                walls[direction].SetActive(tile.walls.Contains(direction));
+                walls[direction].SetActive(tile.walls[direction] != null);
             }
         }
     }
