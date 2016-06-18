@@ -52,7 +52,7 @@ public class Map : System.Object, IEnumerable
         Tile tile = new Tile(this, position);
         tiles[position] = tile;
 
-        Debug.Log("New tile " + tile);
+        //Debug.Log("New tile " + tile);
 
         return tile;
     }

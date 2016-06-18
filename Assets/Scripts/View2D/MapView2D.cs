@@ -46,25 +46,11 @@ public class MapView2D : MonoBehaviour, IMapView {
 
             RectTransform transform = (RectTransform) tileViewGO.gameObject.transform;
 
-            float h = 33;
-            float w = Mathf.Sqrt(3) / 2 * h;
-
-            Debug.Log(tile + " ==> " + sc);
-
-            transform.position = tilesContainer.transform.position + new Vector3(sc.position.x * 32, sc.position.y * 32, 0);
-            /*transform.sizeDelta = new Vector2(
-                w,
-                h
-            );*/
-
-            foreach (RectTransform childTransform in tilesContainer.transform)
-            {
-                /*childTransform.sizeDelta = new Vector2(
-                    w,
-                    h
-                );*/
-            }
-
+            float h = 87;
+            float w = h - Mathf.Sqrt(3) / 2;
+            
+            transform.position = tilesContainer.transform.position + new Vector3(sc.position.x * w, sc.position.y * h, 0);
+            
             tileViewGO.GetComponent<TileView2D>().AttachTile(tile);
         }
     }

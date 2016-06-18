@@ -72,6 +72,8 @@ public class MapGenerator {
                 }
             }
         }
+
+        Debug.Log("Map generation done, " + map.grid.Hexes.Count + " tiles created.");
         
         return map;
     }
